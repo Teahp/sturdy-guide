@@ -55,19 +55,29 @@ ctest --test-dir build-clang --output-on-failure
 ```text
 sturdy-guide/
 ├── .github/workflows/ci.yml       GitHub Actions CI
-├── app/main.cpp                   命令行程序
+├── app/
+│   ├── main.cpp                   命令行程序
+│   └── CMakeLists.txt             声明 CLI target
 ├── cmake/                         SDK 的 CMake 包配置
 ├── docs/SDK.md                    SDK 概念与使用方法
-├── examples/consumer/             安装后的 SDK 消费示例
+├── examples/consumer/             独立的 SDK 消费项目
 ├── include/sturdy_guide/          公共 API
-├── src/                           库实现
-├── tests/                         CTest 测试程序
-└── CMakeLists.txt                 项目构建说明
+├── src/
+│   ├── *.cpp                      库实现
+│   └── CMakeLists.txt             声明库 target
+├── tests/
+│   ├── *_test.cpp                 CTest 测试程序
+│   └── CMakeLists.txt             声明并注册测试 target
+└── CMakeLists.txt                 全局配置与 add_subdirectory
 ```
 
-`sturdy_guide` 是库 target，`sturdy_guide_cli` 是应用 target，两个测试 target 通过 CTest 运行。应用、测试和外部消费者都只依赖公共 target `SturdyGuide::sturdy_guide`。
+根 `CMakeLists.txt` 负责项目级设置并通过 `add_subdirectory()` 进入 `src/`、`app/` 和 `tests/`；每个子目录负责自己的 target。`sturdy_guide` 是库 target，`sturdy_guide_cli` 是应用 target，两个测试 target 通过 CTest 运行。应用、测试和外部消费者都只依赖公共 target `SturdyGuide::sturdy_guide`。
+
+`examples/consumer/` 自带 `project()`，故意不加入根项目：它模拟另一个工程只使用已经安装的 SDK。
 
 ## 作为 SDK 安装和使用
+
+这里的“安装”不是系统软件商店操作，而是把公共头文件、编译后的库和 `find_package` 所需配置复制到指定前缀。consumer 因而不需要访问本项目的 `src/`。
 
 ```bash
 cmake --install build-gcc --prefix install
@@ -95,4 +105,3 @@ CI 在干净环境中重复本地构建和测试，是 PR 合并前的自动质�
 ## 参与协作
 
 本项目采用 Fork → 功能分支 → PR → Review → Merge 的流程。完整命令和规范见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-

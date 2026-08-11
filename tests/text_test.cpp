@@ -6,6 +6,7 @@
 
 namespace {
 
+// 失败信息写入标准错误，配合 ctest --output-on-failure 查看原因。
 bool expect_equal(const std::string_view case_name, const std::string& actual,
                   const std::string_view expected) {
   if (actual == expected) {
@@ -30,4 +31,3 @@ int main() {
                          sturdy_guide::normalize_audience("   "), "World");
   return passed ? 0 : 1;
 }
-

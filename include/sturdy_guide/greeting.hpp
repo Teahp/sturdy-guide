@@ -5,8 +5,7 @@
 
 namespace sturdy_guide {
 
-// Returns a greeting after normalizing the supplied audience name.
+// 规范化传入名称后，返回完整欢迎语。
 std::string make_greeting(std::string_view audience);
 
 }  // namespace sturdy_guide
-

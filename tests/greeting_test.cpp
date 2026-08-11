@@ -6,6 +6,7 @@
 
 namespace {
 
+// 这个小项目不引入测试框架，用返回值向 CTest 报告成功或失败。
 bool expect_equal(const std::string_view case_name, const std::string& actual,
                   const std::string_view expected) {
   if (actual == expected) {
@@ -29,4 +30,3 @@ int main() {
                          "Hello, World!");
   return passed ? 0 : 1;
 }
-
