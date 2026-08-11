@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-install:
+    name: ${{ matrix.name }} / Ninja
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            compiler: g++
+            suffix: gcc
+          - name: Clang
+            compiler: clang++
+            suffix: clang
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Configure
+        run: >-
+          cmake -S . -B build-${{ matrix.suffix }} -G Ninja
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build-${{ matrix.suffix }} --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build-${{ matrix.suffix }} --output-on-failure
+
+      - name: Install SDK
+        run: >-
+          cmake --install build-${{ matrix.suffix }}
+          --prefix install-${{ matrix.suffix }}
+
+      - name: Configure installed SDK consumer
+        run: >-
+          cmake -S examples/consumer -B consumer-build-${{ matrix.suffix }} -G Ninja
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install-${{ matrix.suffix }}
+
+      - name: Build installed SDK consumer
+        run: cmake --build consumer-build-${{ matrix.suffix }}
+
+      - name: Run installed SDK consumer
+        run: ./consumer-build-${{ matrix.suffix }}/sturdy_guide_consumer
+
