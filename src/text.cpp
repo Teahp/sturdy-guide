@@ -24,7 +24,7 @@ std::string normalize_audience(const std::string_view audience) {
     return "World";
   }
 
-  return std::string(audience.substr(first, last - first));
+  return std::string(audience.substr(first, last - first)); //这是一个修改
 }
 
 }  // namespace sturdy_guide
