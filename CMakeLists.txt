@@ -15,6 +15,13 @@ option(STURDY_GUIDE_ENABLE_WARNINGS "Enable common compiler warnings" ON)
 
 # 根文件只负责编排项目；每个子目录负责声明自己的 target。
 add_subdirectory(src)
+
+# 将 project() 中的版本号交给库实现，避免在源码里重复硬编码。
+target_compile_definitions(
+  sturdy_guide
+  PRIVATE STURDY_GUIDE_PROJECT_VERSION="${PROJECT_VERSION}"
+)
+
 add_subdirectory(app)
 if(BUILD_TESTING)
   add_subdirectory(tests)
