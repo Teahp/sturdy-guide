@@ -103,9 +103,11 @@ int main(const int argc, const char* const argv[]) {
       cv::imshow(std::string{window_name}, frame);
 
       const int key = cv::waitKey(1) & 0xFF;
+      const double visibility = cv::getWindowProperty(
+          std::string{window_name}, cv::WND_PROP_VISIBLE);
+      // GTK 等后端可能以负值表示不支持可见性查询，不能把它当作已关闭。
       if (key == 'q' || key == 'Q' ||
-          cv::getWindowProperty(std::string{window_name},
-                                cv::WND_PROP_VISIBLE) < 1.0) {
+          (visibility >= 0.0 && visibility < 1.0)) {
         break;
       }
 
