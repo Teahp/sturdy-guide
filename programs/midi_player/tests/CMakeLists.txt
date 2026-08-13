@@ -1,0 +1,3 @@
+add_executable(midi_player_test midi_player_test.cpp)
+target_link_libraries(midi_player_test PRIVATE SturdyGuide::midi_core)
+add_test(NAME midi_player_test COMMAND midi_player_test)
