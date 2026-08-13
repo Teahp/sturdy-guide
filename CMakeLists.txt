@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
-
+#clang++编译
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 project(
   SturdyGuide
   VERSION 0.1.0
@@ -24,6 +25,7 @@ endif()
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 set(sturdy_guide_cmake_dir "${CMAKE_INSTALL_LIBDIR}/cmake/SturdyGuide")
+
 
 # 生成包配置，让外部项目能通过 find_package(SturdyGuide) 找到 SDK。
 configure_package_config_file(
