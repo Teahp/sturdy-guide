@@ -2,6 +2,7 @@
 add_library(sturdy_guide
   greeting.cpp
   text.cpp
+  change.cpp
 )
 add_library(SturdyGuide::sturdy_guide ALIAS sturdy_guide)
 
