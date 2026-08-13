@@ -87,7 +87,8 @@ sturdy-guide/
 [`programs/midi_player/`](programs/midi_player/) 是完整实现。它将领域模型、运行时多态接口、设备后端、后台播放线程、CLI 和测试拆成独立工程边界：
 
 - 默认把 MIDI 事件打印到终端，不要求安装音频 SDK；
-- Linux 上可以通过 `--device /dev/snd/midiC1D0` 写入原始 MIDI 设备；
+- Linux 上可以通过 `--device /dev/snd/midiC1D0` 写入 raw MIDI 设备；
+- Windows 上通过 `--list-devices` 查询 WinMM 设备，再用 `--device 0` 选择输出；
 - 播放器使用条件变量实现可中断定时等待；
 - 测试通过假输出后端观察消息，不依赖 MIDI 硬件。
 

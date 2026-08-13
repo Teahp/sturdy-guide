@@ -21,13 +21,31 @@ NOTE ON  channel=0 note=60 velocity=96  [ 0x90 0x3c 0x60 ]
 NOTE OFF channel=0 note=60 velocity=0   [ 0x80 0x3c 0x00 ]
 ```
 
-Linux 上若已经存在可写的原始 MIDI 设备，可以指定设备路径：
+默认模式不访问硬件，因此 Windows 和 Linux 上都能运行。要真正听到声音，先列出设备，再选择一个输出。
+
+### Windows
+
+WinMM 是 Windows SDK 自带的多媒体 API，不需要额外安装 MIDI 开发库。在 Visual Studio 的 Developer PowerShell 中构建：
+
+```powershell
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+.\build\Release\sturdy-guide-midi.exe --list-devices
+.\build\Release\sturdy-guide-midi.exe --device 0
+```
+
+`--list-devices` 会输出设备编号和名称，例如 `0: Microsoft GS Wavetable Synth`。请使用本机实际列出的编号；没有输出设备时，程序仍可使用默认终端模式演示。
+
+### Linux
+
+若系统已有可写的 raw MIDI 设备，可以指定设备路径：
 
 ```bash
+./build/sturdy-guide-midi --list-devices
 ./build/sturdy-guide-midi --device /dev/snd/midiC1D0
 ```
 
-可用 `aconnect -l` 或检查 `/dev/snd/` 了解系统 MIDI 端口。设备路径、权限和合成器连接由本机环境决定。
+程序会在 `/dev/snd/` 下查找名称以 `midiC` 开头的 raw MIDI 设备。设备路径、权限和硬件或软件合成器连接由本机环境决定；WSLg 的音频转发本身不会创建 MIDI 端口。
 
 ## 工程结构
 
@@ -47,12 +65,14 @@ MidiSequence  --按时间拥有--> MidiEvent --拥有--> MidiMessage
                                       |
 MidiPlayer --借用--> MidiOutput <-----+-- ConsoleMidiOutput
                                       +-- RawMidiOutput
+                                      +-- WinMmMidiOutput
                                       +-- RecordingOutput（测试）
 ```
 
 - `MidiMessage` 的工厂函数维护通道、音符和力度范围；
 - `MidiSequence` 维护事件按时间排序的不变量；
 - `MidiOutput` 是运行时多态接口，隔离调度逻辑与设备访问；
+- CMake 在 Linux 编译 `RawMidiOutput`，在 Windows 编译 `WinMmMidiOutput` 并链接系统库 `winmm`；
 - `MidiPlayer` 管理一个工作线程，析构时执行 `stop()` 和 `join()`；
 - 条件变量让 `stop()` 能中断长时间等待；
 - 调用外部 `MidiOutput::send()` 时不持有播放器 mutex；
