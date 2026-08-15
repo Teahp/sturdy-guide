@@ -13,10 +13,17 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 option(STURDY_GUIDE_ENABLE_WARNINGS "Enable common compiler warnings" ON)
+option(STURDY_GUIDE_BUILD_LESSON_PROGRAMS
+       "Build the OOP and concurrency lesson programs" ON)
+option(STURDY_GUIDE_BUILD_CAMERA_HOMEWORK
+       "Build the OpenCV camera homework starter" OFF)
 
 # 根文件只负责编排项目；每个子目录负责声明自己的 target。
 add_subdirectory(src)
 add_subdirectory(app)
+if(STURDY_GUIDE_BUILD_LESSON_PROGRAMS)
+  add_subdirectory(programs)
+endif()
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()

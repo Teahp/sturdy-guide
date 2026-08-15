@@ -3,8 +3,8 @@
 /install*/
 /.cache/
 /compile_commands.json
+/captures/
 *.o
 *.a
 *.so
 *.so.*
-

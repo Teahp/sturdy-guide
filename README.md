@@ -2,7 +2,8 @@
 
 [![CI](https://github.com/Teahp/sturdy-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/Teahp/sturdy-guide/actions/workflows/ci.yml)
 
-一个用于 Linux、C++ 工具链、CMake、Ninja、SDK、CI 和 Git 协作教学的多文件示例项目。
+一个用于 Linux、C++ 工具链、CMake、Ninja、SDK、CI、Git 协作以及
+面向对象与并发设计教学的多文件示例项目。
 
 ## 构建关系
 
@@ -37,6 +38,7 @@ cmake -S . -B build-gcc -G Ninja -DCMAKE_CXX_COMPILER=g++
 cmake --build build-gcc
 ctest --test-dir build-gcc --output-on-failure
 ./build-gcc/sturdy-guide Linux
+./build-gcc/sturdy-guide-midi
 ```
 
 ## 使用 Clang++ 构建
@@ -62,6 +64,9 @@ sturdy-guide/
 ├── docs/SDK.md                    SDK 概念与使用方法
 ├── examples/consumer/             独立的 SDK 消费项目
 ├── include/sturdy_guide/          公共 API
+├── programs/
+│   ├── midi_player/               完整的 OOP 与并发示例
+│   └── camera_monitor/            单线程起点与摄像头重构作业
 ├── src/
 │   ├── *.cpp                      库实现
 │   └── CMakeLists.txt             声明库 target
@@ -71,9 +76,29 @@ sturdy-guide/
 └── CMakeLists.txt                 全局配置与 add_subdirectory
 ```
 
-根 `CMakeLists.txt` 负责项目级设置并通过 `add_subdirectory()` 进入 `src/`、`app/` 和 `tests/`；每个子目录负责自己的 target。`sturdy_guide` 是库 target，`sturdy_guide_cli` 是应用 target，两个测试 target 通过 CTest 运行。应用、测试和外部消费者都只依赖公共 target `SturdyGuide::sturdy_guide`。
+根 `CMakeLists.txt` 负责项目级设置并通过 `add_subdirectory()` 进入各个模块；每个子目录负责自己的 target。`sturdy_guide` 是 SDK 库 target，`sturdy_guide_cli` 是原有应用 target。课程程序位于 `programs/`，可以通过 `STURDY_GUIDE_BUILD_LESSON_PROGRAMS` 选项整体启用或关闭。
 
 `examples/consumer/` 自带 `project()`，故意不加入根项目：它模拟另一个工程只使用已经安装的 SDK。
+
+## 面向对象与并发课程程序
+
+### MIDI 播放器示例
+
+[`programs/midi_player/`](programs/midi_player/) 是完整实现。它将领域模型、运行时多态接口、设备后端、后台播放线程、CLI 和测试拆成独立工程边界：
+
+- 默认把 MIDI 事件打印到终端，不要求安装音频 SDK；
+- Linux 上可以通过 `--device /dev/snd/midiC1D0` 写入 raw MIDI 设备；
+- Windows 上通过 `--list-devices` 查询 WinMM 设备，再用 `--device 0` 选择输出；
+- 播放器使用条件变量实现可中断定时等待；
+- 测试通过假输出后端观察消息，不依赖 MIDI 硬件。
+
+详细结构与运行方式见 [MIDI 示例说明](programs/midi_player/README.md)。
+
+### 摄像头回家作业
+
+[`programs/camera_monitor/ASSIGNMENT.md`](programs/camera_monitor/ASSIGNMENT.md) 提供一个使用 OpenCV 调用笔记本内置摄像头或 UVC USB 摄像头的单线程程序。它功能可用，但所有职责都集中在 `main.cpp`。
+
+学生需要在保持外部行为的前提下，将其重构为设备抽象、后台采集会话和主线程应用，并加入有界帧缓冲与硬件无关测试。目标多线程版本不提供实现。
 
 ## 作为 SDK 安装和使用
 
