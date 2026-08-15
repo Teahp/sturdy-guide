@@ -47,7 +47,7 @@ write_basic_package_version_file(
 install(
   FILES
     "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"//改了一个注释
   DESTINATION "${sturdy_guide_cmake_dir}"
 )
 install(
