@@ -16,6 +16,10 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(app)
+
+# include(CTest) 定义 BUILD_TESTING（默认 ON）并为本目录及以下启用测试，
+# 使 tests/ 里的 add_test() 真正注册到 CTest。
+include(CTest)
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
