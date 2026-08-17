@@ -4,6 +4,11 @@
 /.cache/
 /compile_commands.json
 /captures/
+
+# 摄像头作业：构建产物与本机截图（提交用 docs/ 内的正式截图）
+/programs/build-camera/
+/programs/captures/
+
 *.o
 *.a
 *.so
