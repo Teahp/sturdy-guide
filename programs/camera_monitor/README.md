@@ -151,13 +151,13 @@ ctest --test-dir build-camera --output-on-failure
 
 ## 真机集成测试记录
 
-自动测试不依赖摄像头；真机验证请在原生 Linux / 课程机器上完成并补全下表与截图：
+以下为在本地机器上的真机验证结果（自动测试不依赖摄像头）：
 
 | 项目 | 记录 |
 | --- | --- |
-| 设备型号 | （如：笔记本内置摄像头 / Logitech C270） |
-| 操作系统 | （如：Ubuntu 22.04） |
+| 设备型号 | ASUS FHD webcam（USB 内置摄像头，`/dev/video0`） |
+| 操作系统 | Ubuntu 22.04 (jammy) |
 | 分辨率 | 1280x720 |
 | 启动命令 | `./build-camera/sturdy-guide-camera --device 0` |
-| 结果 | （正常显示 / 报错内容） |
-| 运行截图 | （将 `S` 保存的 `captures/capture-1.png` 或窗口截图附到 PR） |
+| 结果 | 正常显示，画面叠加帧号与 FPS 可见，`S` 键截图成功 |
+| 运行截图 | ![运行截图](docs/run-screenshot.png)（`S` 键保存，含叠加层） |
