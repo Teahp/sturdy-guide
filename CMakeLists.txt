@@ -20,6 +20,8 @@ option(STURDY_GUIDE_BUILD_CAMERA_HOMEWORK
 # 根文件只负责编排项目；每个子目录负责声明自己的 target。
 add_subdirectory(src)
 add_subdirectory(app)
+# 课堂练习新增的子目录：独立的可执行 demo。
+add_subdirectory(乔瑞浩新建文件夹)
 if(STURDY_GUIDE_BUILD_LESSON_PROGRAMS)
   add_subdirectory(programs)
 endif()
