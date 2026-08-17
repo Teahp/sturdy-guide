@@ -2,7 +2,7 @@
 add_library(sturdy_guide
   greeting.cpp
   text.cpp
-  乔瑞浩新建.cpp
+  乔瑞浩新建1.cpp
 )
 add_library(SturdyGuide::sturdy_guide ALIAS sturdy_guide)
 
