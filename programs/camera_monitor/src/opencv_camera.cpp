@@ -5,7 +5,7 @@
 namespace sturdy_guide::camera {
 
 OpenCvCamera::OpenCvCamera(const int device, const int width, const int height)
-    : camera_(device, cv::CAP_V4L2) {
+    : camera_(device, cv::CAP_ANY) {
   if (device < 0 || width <= 0 || height <= 0) {
     throw std::invalid_argument(
         "device must be non-negative and dimensions must be positive");
