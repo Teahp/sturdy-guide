@@ -56,7 +56,7 @@ int main(const int argc, const char* const argv[]) {
           "device must be non-negative and dimensions must be positive");
     }
 
-    cv::VideoCapture camera{device, cv::CAP_ANY};
+    cv::VideoCapture camera{device, cv::CAP_ANY};//CAP_ANY 让 OpenCV 自动选择可用的后端（V4L2、DirectShow 等），而不是强制使用特定的 API。
     if (!camera.isOpened()) {
       throw std::runtime_error(
           "cannot open camera; check the device index, permissions, and "
@@ -64,10 +64,10 @@ int main(const int argc, const char* const argv[]) {
     }
 
     camera.set(cv::CAP_PROP_FRAME_WIDTH, static_cast<double>(width));
-    camera.set(cv::CAP_PROP_FRAME_HEIGHT, static_cast<double>(height));
+    camera.set(cv::CAP_PROP_FRAME_HEIGHT, static_cast<double>(height));//设置摄像头的分辨率。
 
     constexpr std::string_view window_name = "Sturdy Guide Camera";
-    cv::namedWindow(std::string{window_name}, cv::WINDOW_NORMAL);
+    cv::namedWindow(std::string{window_name}, cv::WINDOW_NORMAL);//创建一个可调整大小的窗口来显示摄像头捕获的图像。AUTOSIZE 让窗口大小自动适应图像，而 NORMAL 允许用户调整窗口大小。
 
     std::size_t frame_number = 0;
     std::size_t capture_number = 0;
@@ -104,7 +104,7 @@ int main(const int argc, const char* const argv[]) {
 
       const int key = cv::waitKey(1) & 0xFF;
       const double visibility = cv::getWindowProperty(
-          std::string{window_name}, cv::WND_PROP_VISIBLE);
+          std::string{window_name}, cv::WND_PROP_VISIBLE);//获取窗口的可见性属性。返回值为 1.0 表示窗口可见，0.0 表示不可见，负值表示不支持查询。
       // GTK 等后端可能以负值表示不支持可见性查询，不能把它当作已关闭。
       if (key == 'q' || key == 'Q' ||
           (visibility >= 0.0 && visibility < 1.0)) {
