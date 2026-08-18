@@ -7,6 +7,7 @@ endfunction()
 
 # 构建完成后，CTest 会按这里注册的名称运行两个测试程序。
 add_sturdy_guide_test(greeting_test greeting_test.cpp)
+add_sturdy_guide_test(hello_test hello_test.cpp)
 add_sturdy_guide_test(text_test text_test.cpp)
-add_sturdy_guide_test(hello_test greeting_test.cpp)
-add_sturdy_guide_test(text_test text_test.cpp)
+
+
