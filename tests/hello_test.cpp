@@ -1,9 +1,8 @@
-#include <cassert>
-#include <string>
+#include "sturdy_guide/hello.hpp"
 
-std::string hello();
+#include <cassert>
 
 int main() {
-    assert(hello() == "Hello, SRM!");
+    assert(sturdy_guide::hello() == "Hello, SRM!");
     return 0;
 }
