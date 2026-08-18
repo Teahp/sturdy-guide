@@ -24,6 +24,6 @@ endif()
 set_target_properties(
   sturdy_guide_camera_starter
   PROPERTIES
-    OUTPUT_NAME sturdy-guide-camera
+    OUTPUT_NAME sturdy-guide-camera-starter
     RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
 )
