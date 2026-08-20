@@ -1,5 +1,0 @@
-midi_player_test 3 0.00167033
-camera_session_test 3 0.0481703
-greeting_test 3 0.00095437
-text_test 3 0.000796508
----
