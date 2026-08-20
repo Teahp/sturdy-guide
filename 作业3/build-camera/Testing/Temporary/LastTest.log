@@ -1,0 +1,63 @@
+Start testing: Aug 20 17:29 CST
+----------------------------------------------------------
+1/4 Testing: midi_player_test
+1/4 Test: midi_player_test
+Command: "/home/hhkqwq/workspace/sturdy-guide/build-camera/programs/midi_player/tests/midi_player_test"
+Directory: /home/hhkqwq/workspace/sturdy-guide/build-camera/programs/midi_player/tests
+"midi_player_test" start time: Aug 20 17:29 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"midi_player_test" end time: Aug 20 17:29 CST
+"midi_player_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/4 Testing: camera_session_test
+2/4 Test: camera_session_test
+Command: "/home/hhkqwq/workspace/sturdy-guide/build-camera/programs/camera_monitor/tests/camera_session_test"
+Directory: /home/hhkqwq/workspace/sturdy-guide/build-camera/programs/camera_monitor/tests
+"camera_session_test" start time: Aug 20 17:29 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"camera_session_test" end time: Aug 20 17:29 CST
+"camera_session_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/4 Testing: greeting_test
+3/4 Test: greeting_test
+Command: "/home/hhkqwq/workspace/sturdy-guide/build-camera/tests/greeting_test"
+Directory: /home/hhkqwq/workspace/sturdy-guide/build-camera/tests
+"greeting_test" start time: Aug 20 17:29 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"greeting_test" end time: Aug 20 17:29 CST
+"greeting_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/4 Testing: text_test
+4/4 Test: text_test
+Command: "/home/hhkqwq/workspace/sturdy-guide/build-camera/tests/text_test"
+Directory: /home/hhkqwq/workspace/sturdy-guide/build-camera/tests
+"text_test" start time: Aug 20 17:29 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"text_test" end time: Aug 20 17:29 CST
+"text_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 20 17:29 CST
