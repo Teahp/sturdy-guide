@@ -1,0 +1,10 @@
+/build*/
+/consumer-build*/
+/install*/
+/.cache/
+/compile_commands.json
+*.o
+*.a
+*.so
+*.so.*
+

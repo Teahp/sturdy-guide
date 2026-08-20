@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-install:
+    name: ${{ matrix.name }} / Ninja
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      # 同一套源码分别交给 GCC 和 Clang，可较早发现工具链差异。
+      matrix:
+        include:
+          - name: GCC
+            compiler: g++
+            suffix: gcc
+          - name: Clang
+            compiler: clang++
+            suffix: clang
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Configure
+        run: >-
+          cmake -S . -B build-${{ matrix.suffix }} -G Ninja
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build-${{ matrix.suffix }} --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build-${{ matrix.suffix }} --output-on-failure
+
+      - name: Install SDK
+        # 安装到临时前缀，模拟用户拿到头文件、库和 CMake 包配置。
+        run: >-
+          cmake --install build-${{ matrix.suffix }}
+          --prefix install-${{ matrix.suffix }}
+
+      - name: Configure installed SDK consumer
+        # consumer 是独立 CMake 项目，只通过 find_package 使用安装结果。
+        run: >-
+          cmake -S examples/consumer -B consumer-build-${{ matrix.suffix }} -G Ninja
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install-${{ matrix.suffix }}
+
+      - name: Build installed SDK consumer
+        run: cmake --build consumer-build-${{ matrix.suffix }}
+
+      - name: Run installed SDK consumer
+        run: ./consumer-build-${{ matrix.suffix }}/sturdy_guide_consumer

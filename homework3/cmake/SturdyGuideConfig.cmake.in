@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+# 加载安装时导出的 SturdyGuide::sturdy_guide target。
+include("${CMAKE_CURRENT_LIST_DIR}/SturdyGuideTargets.cmake")
+
+check_required_components(SturdyGuide)
