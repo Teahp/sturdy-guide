@@ -1,4 +1,4 @@
-# 这是供学生重构的单文件起始 target，不是目标工程结构。
+# The original single-threaded starter kept for reference.
 add_executable(sturdy_guide_camera_starter main.cpp)
 target_compile_features(sturdy_guide_camera_starter PRIVATE cxx_std_17)
 target_include_directories(
@@ -24,6 +24,6 @@ endif()
 set_target_properties(
   sturdy_guide_camera_starter
   PROPERTIES
-    OUTPUT_NAME sturdy-guide-camera
+    OUTPUT_NAME sturdy-guide-camera-starter
     RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
 )
