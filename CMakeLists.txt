@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
-project(SturdyGuide)
+
+project(
+  SturdyGuide
+  VERSION 0.1.0
+  DESCRIPTION "A small multi-file C++ SDK used for Linux, CMake, CI, and Git lessons"
+  LANGUAGES CXX
+)
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ===== 自动拉取GTest 【核心新增】 =====
+# ===== 自动拉取GTest =====
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -14,9 +20,58 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
-# =====================================
+# =========================
+
 include(CTest)
-# 编译业务库 src 子目录
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+option(STURDY_GUIDE_ENABLE_WARNINGS "Enable common compiler warnings" ON)
+option(STURDY_GUIDE_BUILD_LESSON_PROGRAMS
+       "Build the OOP and concurrency lesson programs" ON)
+option(STURDY_GUIDE_BUILD_CAMERA_HOMEWORK
+       "Build the OpenCV camera homework starter" OFF)
+
+# 根文件只负责编排项目；每个子目录负责声明自己的 target。
 add_subdirectory(src)
-# 编译单元测试 tests 子目录
-add_subdirectory(tests)
+add_subdirectory(app)
+
+if(STURDY_GUIDE_BUILD_LESSON_PROGRAMS)
+  add_subdirectory(programs)
+endif()
+
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+
+# 公共头文件不仅供源码构建使用，也是可安装 SDK 的一部分。
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+set(sturdy_guide_cmake_dir "${CMAKE_INSTALL_LIBDIR}/cmake/SturdyGuide")
+
+# 生成包配置，让外部项目能通过 find_package(SturdyGuide) 找到 SDK。
+configure_package_config_file(
+  cmake/SturdyGuideConfig.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfig.cmake"
+  INSTALL_DESTINATION "${sturdy_guide_cmake_dir}"
+)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"
+  VERSION "${PROJECT_VERSION}"
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"
+  DESTINATION "${sturdy_guide_cmake_dir}"
+)
+
+install(
+  EXPORT SturdyGuideTargets
+  FILE SturdyGuideTargets.cmake
+  NAMESPACE SturdyGuide::
+  DESTINATION "${sturdy_guide_cmake_dir}"
+)
