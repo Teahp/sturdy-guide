@@ -7,6 +7,21 @@ project(
   LANGUAGES CXX
 )
 
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ===== 自动拉取GTest =====
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://gitee.com/mirrors/googletest.git
+  GIT_TAG v1.14.0
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+# =========================
+
 include(CTest)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -20,9 +35,11 @@ option(STURDY_GUIDE_BUILD_CAMERA_HOMEWORK
 # 根文件只负责编排项目；每个子目录负责声明自己的 target。
 add_subdirectory(src)
 add_subdirectory(app)
+
 if(STURDY_GUIDE_BUILD_LESSON_PROGRAMS)
   add_subdirectory(programs)
 endif()
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
@@ -38,6 +55,7 @@ configure_package_config_file(
   "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfig.cmake"
   INSTALL_DESTINATION "${sturdy_guide_cmake_dir}"
 )
+
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"
   VERSION "${PROJECT_VERSION}"
@@ -50,6 +68,7 @@ install(
     "${CMAKE_CURRENT_BINARY_DIR}/SturdyGuideConfigVersion.cmake"
   DESTINATION "${sturdy_guide_cmake_dir}"
 )
+
 install(
   EXPORT SturdyGuideTargets
   FILE SturdyGuideTargets.cmake
