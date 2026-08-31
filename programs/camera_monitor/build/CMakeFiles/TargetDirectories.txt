@@ -1,0 +1,15 @@
+/home/yu/camera_monitor/build/CMakeFiles/test.dir
+/home/yu/camera_monitor/build/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build/CMakeFiles/rebuild_cache.dir
+/home/yu/camera_monitor/build/src/CMakeFiles/camera_lib.dir
+/home/yu/camera_monitor/build/src/CMakeFiles/test.dir
+/home/yu/camera_monitor/build/src/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build/src/CMakeFiles/rebuild_cache.dir
+/home/yu/camera_monitor/build/app/CMakeFiles/sturdy_guide_camera.dir
+/home/yu/camera_monitor/build/app/CMakeFiles/test.dir
+/home/yu/camera_monitor/build/app/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build/app/CMakeFiles/rebuild_cache.dir
+/home/yu/camera_monitor/build/tests/CMakeFiles/camera_session_test.dir
+/home/yu/camera_monitor/build/tests/CMakeFiles/test.dir
+/home/yu/camera_monitor/build/tests/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build/tests/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,28 @@
+Start testing: Aug 31 14:11 CST
+----------------------------------------------------------
+1/1 Testing: CameraSessionTests
+1/1 Test: CameraSessionTests
+Command: "/home/yu/camera_monitor/build/tests/camera_session_test"
+Directory: /home/yu/camera_monitor/build/tests
+"CameraSessionTests" start time: Aug 31 14:11 CST
+Output:
+----------------------------------------------------------
+Running CameraSession tests:
+- start & frame sequence ... PASSED
+- repeated start safety ... PASSED
+- repeated stop safety ... PASSED
+- destructor joins thread ... PASSED
+- bounded buffer & drop policy ... PASSED
+- error cross-thread propagation ... PASSED
+- empty frame not published ... PASSED
+
+Result: 7/7 passed
+<end of output>
+Test time =   0.80 sec
+----------------------------------------------------------
+Test Passed.
+"CameraSessionTests" end time: Aug 31 14:11 CST
+"CameraSessionTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 31 14:11 CST

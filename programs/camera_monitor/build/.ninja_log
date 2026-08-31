@@ -1,0 +1,18 @@
+# ninja log v5
+0	1030	1788156670866291833	src/CMakeFiles/camera_lib.dir/opencv_camera.cpp.o	149b48f3ef997381
+1	1049	1788156670888291379	src/CMakeFiles/camera_lib.dir/fake_frame_source.cpp.o	bddedc356e5d6a4f
+3	1105	1788156670946290184	tests/CMakeFiles/camera_session_test.dir/test_camera_session.cpp.o	fff4f39708fd0a4e
+1	1118	1788156670958289937	src/CMakeFiles/camera_lib.dir/camera_session.cpp.o	aa620f9ac53755ab
+1118	1162	1788156671003289000	src/libcamera_lib.a	4b0f38336deadbf9
+2	1179	1788156671020288592	app/CMakeFiles/sturdy_guide_camera.dir/main.cpp.o	30a6d090fd3d3456
+1163	1221	1788156671061287609	tests/camera_session_test	1e034ecc93da5674
+1179	1504	1788156671342280874	sturdy-guide-camera	789b32726e95cc2f
+1	463	1788163318995400586	src/CMakeFiles/camera_lib.dir/opencv_camera.cpp.o	149b48f3ef997381
+463	510	1788163319041395526	src/libcamera_lib.a	4b0f38336deadbf9
+511	572	1788163319103388714	tests/camera_session_test	1e034ecc93da5674
+510	720	1788163319249372674	sturdy-guide-camera	789b32726e95cc2f
+1	493	1788164464809577318	src/CMakeFiles/camera_lib.dir/opencv_camera.cpp.o	149b48f3ef997381
+493	541	1788164464856575408	src/libcamera_lib.a	4b0f38336deadbf9
+2	551	1788164464866575002	tests/CMakeFiles/camera_session_test.dir/test_camera_session.cpp.o	fff4f39708fd0a4e
+551	613	1788164464927572524	tests/camera_session_test	1e034ecc93da5674
+541	895	1788164465208561154	sturdy-guide-camera	789b32726e95cc2f

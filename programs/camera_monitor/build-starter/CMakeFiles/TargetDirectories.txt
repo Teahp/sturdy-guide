@@ -1,0 +1,5 @@
+/home/yu/camera_monitor/build-starter/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build-starter/CMakeFiles/rebuild_cache.dir
+/home/yu/camera_monitor/build-starter/starter/CMakeFiles/sturdy_guide_camera_starter.dir
+/home/yu/camera_monitor/build-starter/starter/CMakeFiles/edit_cache.dir
+/home/yu/camera_monitor/build-starter/starter/CMakeFiles/rebuild_cache.dir
