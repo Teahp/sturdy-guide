@@ -4,11 +4,13 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <chrono>
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <string_view>
 
 namespace camera {
 
@@ -40,6 +42,7 @@ int PreviewApplication::run() {
 
       draw_overlay(frame, frame_number_, frames_per_second_);
       cv::imshow(std::string{window_name}, frame);  // Main-thread UI only.
+      last_displayed_ = frame;  // Shallow copy keeps the data alive.
     }
 
     const int key = cv::waitKey(1) & 0xFF;
@@ -52,7 +55,12 @@ int PreviewApplication::run() {
     }
 
     if (key == 's' || key == 'S') {
-      save_capture(frame);
+      if (!save_capture()) {
+        // The original program threw on save failure and exited non-zero;
+        // preserve that behaviour instead of silently continuing.
+        save_failed_ = true;
+        break;
+      }
     }
 
     if (status == CameraSession::FrameStatus::Ended) {
@@ -67,7 +75,7 @@ int PreviewApplication::run() {
 
   session_.stop();
   cv::destroyAllWindows();
-  return session_.has_error() ? 1 : 0;
+  return (session_.has_error() || save_failed_) ? 1 : 0;
 }
 
 void PreviewApplication::draw_overlay(cv::Mat& frame, std::size_t frame_number,
@@ -80,9 +88,10 @@ void PreviewApplication::draw_overlay(cv::Mat& frame, std::size_t frame_number,
               cv::LINE_AA);
 }
 
-void PreviewApplication::save_capture(const cv::Mat& frame) {
-  if (frame.empty()) {
-    return;
+bool PreviewApplication::save_capture() {
+  if (last_displayed_.empty()) {
+    std::cerr << "camera: no frame displayed yet, nothing to save\n";
+    return false;
   }
   std::filesystem::create_directories("captures");
   std::filesystem::path filename;
@@ -92,11 +101,12 @@ void PreviewApplication::save_capture(const cv::Mat& frame) {
                ("capture-" + std::to_string(capture_number_) + ".png");
   } while (std::filesystem::exists(filename));
 
-  if (!cv::imwrite(filename.string(), frame)) {
+  if (!cv::imwrite(filename.string(), last_displayed_)) {
     std::cerr << "camera: failed to save " << filename << '\n';
-    return;
+    return false;
   }
   std::cout << "Saved " << filename << '\n';
+  return true;
 }
 
 void PreviewApplication::report_error() {

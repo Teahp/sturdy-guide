@@ -1,4 +1,4 @@
-#include <string>
+#include "sturdy_guide/hello.hpp"
 
 namespace sturdy_guide {
 

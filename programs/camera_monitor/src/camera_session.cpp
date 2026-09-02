@@ -19,9 +19,16 @@ void CameraSession::start() {
   stop_requested_ = false;
   frames_.clear();
   error_ = nullptr;
-  lock.unlock();
 
-  worker_ = std::thread(&CameraSession::worker_loop, this);
+  try {
+    // Create the thread while holding the lock: if construction throws (e.g.
+    // resource exhaustion) we roll the state back so a later start() can
+    // retry, and stop() can never observe a half-started session.
+    worker_ = std::thread(&CameraSession::worker_loop, this);
+  } catch (...) {
+    started_ = false;
+    throw;
+  }
 }
 
 void CameraSession::stop() {
@@ -60,8 +67,10 @@ CameraSession::FrameStatus CameraSession::wait_for_frame(
   });
 
   if (!frames_.empty()) {
-    // Serve the newest frame; older buffered frames are dropped, keeping the
-    // buffer bounded when the consumer is slow.
+    // Return the newest frame. Older buffered frames stay queued and are
+    // returned by later calls when the consumer outpaces the producer; the
+    // worker keeps the queue bounded (kMaxBufferedFrames) by dropping the
+    // oldest frames on the way in.
     frame = std::move(frames_.back());
     frames_.pop_back();
     return FrameStatus::NewFrame;
@@ -97,7 +106,9 @@ void CameraSession::worker_loop() {
     bool ok = false;
     try {
       ok = source_->read(frame);
-    } catch (const std::exception&) {
+    } catch (...) {
+      // Capture any exception (not only std::exception) so a misbehaving
+      // FrameSource can never escape the worker thread and std::terminate.
       std::unique_lock<std::mutex> lock(mutex_);
       error_ = std::current_exception();
       cv_.notify_all();

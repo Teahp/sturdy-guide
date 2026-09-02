@@ -2,6 +2,8 @@
 
 #include "camera/camera_session.hpp"
 
+#include <opencv2/core.hpp>
+
 #include <chrono>
 #include <cstddef>
 #include <string>
@@ -21,11 +23,18 @@ class PreviewApplication {
 
  private:
   void draw_overlay(cv::Mat& frame, std::size_t frame_number, double fps);
-  void save_capture(const cv::Mat& frame);
+  // Saves the most recently displayed frame. Returns false on failure.
+  bool save_capture();
   void report_error();
 
   CameraSession& session_;
 
+  // The last frame handed to imshow(); S always saves this, matching the
+  // original program where the displayed frame was always the saved one even
+  // if no new frame arrived in the current loop iteration.
+  cv::Mat last_displayed_;
+
+  bool save_failed_ = false;
   std::size_t frame_number_ = 0;
   std::size_t capture_number_ = 0;
   std::size_t frames_in_window_ = 0;

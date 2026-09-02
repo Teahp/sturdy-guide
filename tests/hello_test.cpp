@@ -1,10 +1,7 @@
+#include "sturdy_guide/hello.hpp"
+
 #include <iostream>
 #include <string>
-
-// Forward-declare the library function instead of adding a new header.
-namespace sturdy_guide {
-std::string make_hello();
-}  // namespace sturdy_guide
 
 int main() {
   const std::string actual = sturdy_guide::make_hello();

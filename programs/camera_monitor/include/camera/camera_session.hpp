@@ -2,6 +2,8 @@
 
 #include "camera/frame_source.hpp"
 
+#include <opencv2/core.hpp>
+
 #include <chrono>
 #include <condition_variable>
 #include <cstddef>
