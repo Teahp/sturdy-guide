@@ -1,0 +1,7 @@
+add_executable(camera_session_test camera_session_test.cpp)
+
+target_include_directories(camera_session_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(camera_session_test PRIVATE cxx_std_17)
+target_link_libraries(camera_session_test PRIVATE camera::camera_core)
+
+add_test(NAME camera_session_test COMMAND camera_session_test)
