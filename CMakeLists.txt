@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(
   SturdyGuide
-  VERSION 0.1.0
+  VERSION 0.2.0
   DESCRIPTION "A small multi-file C++ SDK used for Linux, CMake, CI, and Git lessons"
   LANGUAGES CXX
 )
