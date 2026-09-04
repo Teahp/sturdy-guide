@@ -65,6 +65,14 @@ Idle → Running（start()）
 Running → Failed（后台取帧抛错）
 Running / Failed → Idle（stop() 完成线程 join 后）
 ```
+- `start()`：仅控制线程、且状态为 Idle 时调用；Running/Failed 时再次调用抛 `std::logic_error`。
+- `stop()`：可被任意线程调用，幂等；Idle 时为空操作。
+- `state()` / `error()` / `consume_latest()`：内部加锁，由主线程调用。
+- 资源所有权：`CameraSession` 以 `std::unique_ptr<FrameSource>` 独占摄像头并负责其生命周期；`OpenCvCamera` 持有已打开的 `cv::VideoCapture`，构造失败即抛异常。
+- 缓冲与丢帧：缓冲有界（最多两帧 `newest_` / `oldest_`），满时新帧覆盖最旧帧——丢旧保新，画面始终最新、内存有界。
+- 锁范围：`mutex_` 只保护 `stop_requested_`、`state_`、`error_` 与两帧槽；`read()`、`imshow()`、`imwrite()` 等慢/阻塞 I/O 一律在锁外执行，避免持锁等待摄像头。
+- 异常跨线程：后台 `catch(...)` 用 `std::current_exception()` 冻结为 `exception_ptr` 存入 `error_` 并置 `kFailed`；主线程观察后 `std::rethrow_exception()` 重抛，再以 `try/catch` 报告，异常类型完整保留。
+- 析构顺序：`stop()`（置 `stop_requested_`）→ `notify_all()` 唤醒 → `join()` 等后台退出 → 置 `kIdle` → 之后才销毁成员。
 
 ## 真机测试记录
 
