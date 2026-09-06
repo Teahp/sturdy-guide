@@ -20,7 +20,8 @@ ctest --test-dir build-camera --output-on-failure
 说明：
 
 - 自动测试不打开真实设备 `0`，用 `FakeFrameSource` 驱动 `CameraSession`；
-- 真机测试需在原生 Linux（或课程 Linux 机）上完成，并记录设备型号、
+- 真机测试需在原生 Linux（或课程 Linux 机）上完成，并记录设备型号、操作系统、
+  分辨率与运行结果，不要用“摄像头上能跑”替代上述自动测试。
 
 ## 工程结构
 
@@ -34,7 +35,10 @@ camera_monitor/
 │   ├── opencv_camera.cpp    真设备实现
 │   ├── camera_session.cpp   采集会话实现
 │   └── CMakeLists.txt       核心库 target
-├── app/main.cpp          参数解析、依赖组装与主线程窗口循环
+├── app/
+│   ├── main.cpp              参数解析与依赖组装（摄像头 -> 会话 -> PreviewApplication）
+│   ├── preview_application.hpp/.cpp  PreviewApplication：主线程窗口循环（显示/按键/截图/错误）
+│   └── CMakeLists.txt        应用 target
 ├── tests/camera_session_test.cpp  硬件无关测试（FakeFrameSource）
 ├── starter/              原始单线程版本，仅作对照，不再编译
 ├── CMakeLists.txt        查找 OpenCV/Threads，编排子目录
@@ -53,9 +57,11 @@ CameraSession  --拥有(unique_ptr)-->  FrameSource
 ├── start / stop / 析构状态机
 └── std::exception_ptr 把后台异常传回主线程
 
-app/main.cpp（主线程 = 消费者）
-├── take_latest() 取最新帧，锁内取、锁外 imshow
+PreviewApplication（主线程 = 消费者，见 app/preview_application.*）
+├── 持有 CameraSession&，take_latest() 取最新帧，锁内取、锁外 imshow
 └── 按键 / 截图 / 用户可见错误，不直接访问会话内部锁与线程
+
+app/main.cpp  解析参数并组装：OpenCvCamera -> CameraSession -> PreviewApplication
 ```
 
 `CameraSession` 通过 `std::unique_ptr<FrameSource>` 独占设备，真/假设备遵循

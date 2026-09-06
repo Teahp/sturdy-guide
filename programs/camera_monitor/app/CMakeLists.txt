@@ -1,4 +1,8 @@
-add_executable(sturdy_guide_camera_app main.cpp)
+add_executable(
+  sturdy_guide_camera_app
+  main.cpp
+  preview_application.cpp
+)
 target_link_libraries(
   sturdy_guide_camera_app
   PRIVATE SturdyGuide::camera_core
