@@ -7,6 +7,10 @@ set(sturdy_guide_midi_sources
   src/midi_message.cpp
   src/midi_player.cpp
   src/midi_sequence.cpp
+        ../camera_monitor/include/camera/frame_source.hpp
+        ../camera_monitor/src/open_cv_camera.cpp
+        ../camera_monitor/app/main.cpp
+        ../camera_monitor/src/camera_session.cpp
 )
 
 # 平台设备后端只在对应系统编译，公共播放器逻辑保持不变。
