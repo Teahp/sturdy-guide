@@ -184,7 +184,24 @@ source_->close();                         // 5. 线程已退出，关闭设备�
 另有一组 `fake_frame_source_test`，保证测试替身本身的行为（未 `open` 不能读、`close()` 幂等、
 `total_frames` 会耗尽、`empty_at` / `throw_at` 语义正确）是可靠的。
 
-## 关于本机运行截图
+## 验证记录
 
-`programs/camera_monitor` 的目标环境是直接装有摄像头的 Linux 机器。在 WSL 里默认没有
-`/dev/video*`，因此本目录的运行截图取自 …（提交 PR 时补上真实设备截图）。
+构建与测试在 WSL（Ubuntu 26.04 / GCC 15.2.0 / CMake 4.2.3 / Ninja 1.13.2 / OpenCV 4.10.0）完成：
+
+```bash
+cmake -S . -B build-camera -G Ninja -DSTURDY_GUIDE_BUILD_CAMERA_HOMEWORK=ON
+cmake --build build-camera
+ctest --test-dir build-camera --output-on-failure
+```
+
+```text
+100% tests passed, 0 tests failed out of 5
+```
+
+- 摄像头相关的两项用例重复运行 20 次无失败（`ctest --repeat until-fail:20`）；
+- 用 `-fsanitize=thread` 重新编译并运行两项用例，ThreadSanitizer 未报告任何数据竞争；
+- `--help`、无可用设备、非法参数三条路径都给出预期输出与退出码；
+  无设备时输出 `camera: cannot open OpenCV device 0 at 1280x720; check the device index, permissions, ...` 并返回 1。
+
+开发环境是 WSL，默认不会把 Windows 的摄像头透传成 `/dev/video*`，所以这里用 `FakeFrameSource`
+覆盖并发行为；真实摄像头的运行截图在 PR 讨论中补充。
